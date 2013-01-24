@@ -149,7 +149,7 @@ public class TestStudent {
       Class<?> studentClass = classLoader.loadClass(Student.class.getName());
       int version = getVersion(studentClass);
       assertEquals(version, versionInfo1.versionNumber);
-      String msg = "*** Version " + version + " of " + studentClass.getName() + " ***";
+      String msg = "\n*** Version " + version + " of " + studentClass.getName() + " ***";
       System.out.println(msg);
 
       Class<?> testClass = classLoader.loadClass(TestStudent.class.getName());
@@ -163,13 +163,19 @@ public class TestStudent {
         method.invoke(null, in);
         System.out.println();
       }
-      System.out.println();
     }
   }
 
-  private static int getVersion(Class<?> serverStatusClass) throws Exception {
+  /**
+   * Tries to get the serialization version number that is hard-coded into the given class.
+   * 
+   * @param clazz The class from which to get the serialization version number.
+   * @return The serialization version number for the given class, or 1 if the value doesn't exist.
+   * @throws Exception If the serialization version number couldn't be retrieved.
+   */
+  private static int getVersion(Class<?> clazz) throws Exception {
     try {
-      Field versionField = serverStatusClass.getDeclaredField(SERIALIZATION_VERSION_NUMBER);
+      Field versionField = clazz.getDeclaredField(SERIALIZATION_VERSION_NUMBER);
       versionField.setAccessible(true);
       return versionField.getInt(null);
     }
