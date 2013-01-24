@@ -9,18 +9,20 @@
   <property name="junit.version" value="4.9" />
   <property name="jcommon.version" value="1.0.9" />
   <property name="jfreechart.version" value="1.0.9" />
-  <property name="commons.version" value="3.1" />
+  <property name="commons.lang.version" value="3.1" />
   
   <target name="install-libraries" description="Install libraries needed for compilation">
     <ivy:retrieve organisation="org.junit" module="junit" revision="${junit.version}" pattern="${lib.dir}/junit/[artifact].[ext]"
 	   sync="true" inline="true" conf="default" log="download-only" transitive="false" type="jar" />
     <path id="junit.path" location="${lib.dir}/junit/junit.jar" />
 
-    <ivy:retrieve organisation="org.apache.commons" module="commons-lang" revision="${commons.version}" pattern="${lib.dir}/apache/commons/[artifact].[ext]"
+    <ivy:retrieve organisation="org.apache.commons" module="commons-lang" revision="${commons.lang.version}" pattern="${lib.dir}/apache/commons-lang/[artifact].[ext]"
 	   sync="true" inline="true" conf="default" log="download-only" transitive="false" type="jar,javadoc" />
-    <path id="apache.commons.path" location="${lib.dir}/apache/commons/commons-lang.jar" />
+    <path id="apache.commons.lang.path" location="${lib.dir}/apache/commons-lang/commons-lang.jar" />
 
     <path id="com.bpd.commons.path" location="${libs.dir}/bpd-commons.jar" />
+
+    <path id="apache.commons.collections.path" location="${libs.dir}/collections-generic-4.01/collections-generic-4.01.jar" />
   </target>
 
   <!-- Basic properties for this system -->
@@ -37,7 +39,8 @@
   <!-- The compile classpath is useful to many tools. -->
   <path id="compile.classpath">
     <path refid="junit.path" />
-    <path refid="apache.commons.path" />
+    <path refid="apache.commons.lang.path" />
+    <path refid="apache.commons.collections.path" />
     <path refid="com.bpd.commons.path" />
   </path>
 
@@ -56,7 +59,11 @@
         <exclude name="**/*.java" />
       </fileset>
     </copy>
-    <javac srcdir="${test.dir}" destdir="${build.classes.dir}" debug="on" includeAntRuntime="no">
+    <javac destdir="${build.classes.dir}" debug="on" includeAntRuntime="no" >
+      <src>
+        <pathelement location="${src.dir}/com/bpd/student/" />
+        <pathelement location="${test.dir}/com/bpd/student/" />
+      </src>
       <classpath refid="compile.classpath" />
       <compilerarg value="-Xlint:all" />
       <compilerarg value="-Werror" />

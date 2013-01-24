@@ -22,6 +22,8 @@ public class Student implements Serializable {
    */
   private static final long serialVersionUID = 2343791679533368945L;
 
+  static final int SERIALIZATION_VERSION_NUMBER = 2;
+
   /*
    * The following three fields are found in version 1.0 of this class.
    */
